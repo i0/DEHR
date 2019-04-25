@@ -1,0 +1,11 @@
+{
+  "name": "dehr",
+  "version": "10.0.1",
+  "description": "Decentralized Electronic Health Record Platform",
+  "scripts": {
+    "test": "mocha --recursive"
+  },
+  "author": "Mahdi Ghadamyari",
+  "email": "ghadamy@uwindsor.ca",
+  "license": "Apache-2.0"
+}

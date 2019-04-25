@@ -1,0 +1,107 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Write your model definitions here
+ */
+
+namespace org.dehr
+
+participant Organization identified by organizationId {
+  o String organizationId
+  o String name
+}
+
+participant Patient identified by patientId{
+  o String patientId
+  o String name
+  --> Organization organization
+}
+
+enum Status {
+  o PENDING
+  o DENIED
+  o GRANTED
+  o REVOKED
+}
+
+concept GrantedPermission {
+  o Permission permission
+  --> PermissionRequest permissionRequest
+}
+
+concept Permission {
+  o RecordType[] recordType
+  o Boolean writeAccess default=false
+  o DateTime expiryDate optional
+  --> Patient patient
+}
+
+participant Professional identified by professionalId {
+  o String professionalId
+  o String name
+  o GrantedPermission[] grantedPermissions optional
+  --> Organization organization
+}
+
+enum RecordType {
+  o IDENTITY
+  o MEDICATION
+  o VACCINATE
+  o LAB_RESULT
+  o ALLERGY
+  o VITAL_SIGN
+  o PRESCRIPTION
+  o BILLING
+}
+
+asset HealthRecord identified by healthRecordId {
+  o String healthRecordId
+  o RecordType recordType
+  o String[] details
+  --> Patient patient
+}
+
+enum TransferRequestStatus {
+  o PENDING
+  o ACCEPTED
+  o REFUSED
+}
+
+// Asset and transactions for requesting a permission
+asset PermissionRequest identified by permissionRequestId {
+  o String permissionRequestId
+  o Permission permission
+  o Status status default="PENDING"
+  --> Professional professional
+}
+
+transaction RequestPermission {
+  o Permission permission
+  --> Professional professional
+}
+
+transaction ChangePermissionStatus {
+  --> PermissionRequest permissionRequest
+  o Status status
+}
+
+// transaction for transferring a patient
+transaction TransferPatient {
+  --> Patient patient
+  --> Organization organization
+}
+
+transaction SetupDemo  {
+}

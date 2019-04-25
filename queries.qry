@@ -1,0 +1,33 @@
+query MedicalRecordsOfPatient {
+    description: "Select health records by type"
+    statement:
+        SELECT org.dehr.HealthRecord
+            WHERE (patient == _$patient)
+}
+query PendingPermissionRequests {
+    description: "Select pending permission requests"
+    statement:
+        SELECT org.dehr.PermissionRequest
+            WHERE (status == "PENDING")
+}
+
+query PendingPermissionRequestsByProfessional {
+    description: "Select pending permission requests by professional"
+    statement:
+        SELECT org.dehr.PermissionRequest
+            WHERE ((status == "PENDING") AND (professional == _$professional))
+}
+
+query PendingPermissionRequestsByPatient {
+    description: "Select pending permission requests by professional"
+    statement:
+        SELECT org.dehr.PermissionRequest
+            WHERE ((status == "PENDING") AND (permission.patient == _$patient))
+}
+
+query PendingPermissionRequestsByProfessionalAndPatient {
+    description: "Select pending permission requests by professional"
+    statement:
+        SELECT org.dehr.PermissionRequest
+            WHERE ((status == "PENDING") AND (professional == _$professional) AND (permission.patient == _$patient))
+}
